@@ -1,0 +1,97 @@
+{
+  "name": "extra-chat-providers",
+  "version": "1.0.0",
+  "displayName": "Extra Chat Providers",
+  "description": "Extra models providers for Github Copilot Chat",
+  "author": "Cristian Militaru",
+  "publisher": "crsx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crsxmilitaru/extra-chat-providers"
+  },
+  "license": "ISC",
+  "keywords": [
+    "xiaomi",
+    "mimo",
+    "glm",
+    "zai",
+    "nvidia",
+    "nim",
+    "ai",
+    "chat",
+    "copilot",
+    "language-model",
+    "provider"
+  ],
+  "icon": "icon.png",
+  "engines": {
+    "vscode": "^1.108.1"
+  },
+  "categories": [
+    "AI",
+    "Chat"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languageModelChatProviders": [
+      {
+        "vendor": "crsx.xiaomi",
+        "displayName": "Xiaomi",
+        "managementCommand": "extra-chat-providers.xiaomi.manage"
+      },
+      {
+        "vendor": "crsx.glm",
+        "displayName": "Z.ai",
+        "managementCommand": "extra-chat-providers.glm.manage"
+      },
+      {
+        "vendor": "crsx.nvidia",
+        "displayName": "NVIDIA NIM",
+        "managementCommand": "extra-chat-providers.nvidia.manage"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extra-chat-providers.xiaomi.manage",
+        "title": "Extra Chat Providers: Xiaomi - Manage"
+      },
+      {
+        "command": "extra-chat-providers.glm.manage",
+        "title": "Extra Chat Providers: Z.ai - Manage"
+      },
+      {
+        "command": "extra-chat-providers.nvidia.manage",
+        "title": "Extra Chat Providers: NVIDIA NIM - Manage"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "clean": "node -e \"require('fs').rmSync('out', { recursive: true, force: true }); require('fs').rmSync('tsconfig.tsbuildinfo', { force: true })\"",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^25.5.2",
+    "@types/vscode": "1.108.1",
+    "@vscode/vsce": "^3.7.1",
+    "eslint": "10.2.0",
+    "eslint-plugin-n": "^17.24.0",
+    "globals": "^17.4.0",
+    "typescript": "^6.0.2",
+    "typescript-eslint": "^8.58.0"
+  },
+  "dependencies": {
+    "openai": "^6.33.0",
+    "secure-json-parse": "^4.1.0",
+    "ts-pattern": "^5.9.0"
+  }
+}
