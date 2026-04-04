@@ -10,16 +10,16 @@
   <a href="https://marketplace.visualstudio.com/items?itemName=crsx.extra-chat-providers"><img src="https://vsmarketplacebadges.dev/version/crsx.extra-chat-providers.png" alt="VS Marketplace Version"></a>
   <a href="https://marketplace.visualstudio.com/items?itemName=crsx.extra-chat-providers"><img src="https://vsmarketplacebadges.dev/downloads/crsx.extra-chat-providers.png" alt="VS Marketplace Downloads"></a>
   <br>
-  <a href="https://github.com/crsmilitaru97/extra-chat-providers"><img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white" alt="GitHub"></a>
-  <a href="https://github.com/crsmilitaru97/extra-chat-providers/stargazers"><img src="https://img.shields.io/github/stars/crsmilitaru97/extra-chat-providers?logo=github" alt="GitHub Stars"></a>
-  <a href="https://github.com/crsmilitaru97/extra-chat-providers/blob/main/LICENSE"><img src="https://img.shields.io/github/license/crsmilitaru97/extra-chat-providers?style=flat" alt="License"></a>
+  <a href="https://github.com/crsxmilitaru/extra-chat-providers"><img src="https://img.shields.io/badge/GitHub-Repository-181717?logo=github&logoColor=white" alt="GitHub"></a>
+  <a href="https://github.com/crsxmilitaru/extra-chat-providers/stargazers"><img src="https://img.shields.io/github/stars/crsxmilitaru/extra-chat-providers?logo=github" alt="GitHub Stars"></a>
+  <a href="https://github.com/crsxmilitaru/extra-chat-providers/blob/main/LICENSE"><img src="https://img.shields.io/github/license/crsxmilitaru/extra-chat-providers?style=flat" alt="License"></a>
   <a href="https://www.paypal.com/donate?hosted_button_id=MZQS5CZ68NGEW"><img src="https://img.shields.io/badge/Donate-PayPal-00457C?logo=paypal&logoColor=white" alt="Donate"></a>
 </p>
 
 ---
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/crsmilitaru97/extra-chat-providers/main/icon.png" alt="Extra Chat Providers Icon" style="width: 128px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
+  <img src="https://raw.githubusercontent.com/crsxmilitaru/extra-chat-providers/main/icon.png" alt="Extra Chat Providers Icon" style="width: 128px; border-radius: 16px; box-shadow: 0 4px 16px rgba(0,0,0,0.2);">
 </p>
 
 ## ✨ Features
