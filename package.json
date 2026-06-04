@@ -1,6 +1,6 @@
 {
   "name": "extra-chat-providers",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "displayName": "Extra Chat Providers",
   "description": "Extra models providers for Github Copilot Chat",
   "author": "Cristian Militaru",
