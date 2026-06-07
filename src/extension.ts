@@ -2,11 +2,14 @@ import * as vscode from 'vscode';
 import { AuthManager } from './auth';
 import { GlmAuthManager } from './glmAuth';
 import { GlmChatProvider } from './glmProvider';
+import { GroqAuthManager } from './groqAuth';
+import { GroqChatProvider } from './groqProvider';
 import { NvidiaAuthManager } from './nvidiaAuth';
 import { NvidiaChatProvider } from './nvidiaProvider';
 import { MiMoChatProvider } from './provider';
 import { MiMoApiClient } from './api';
 import { GlmApiClient } from './glmApi';
+import { GroqApiClient } from './groqApi';
 import { NvidiaNimApiClient } from './nvidiaApi';
 import { GenericApiClient } from './baseApi';
 import type { BaseAuthManager } from './baseAuth';
@@ -14,6 +17,7 @@ import type { BaseAuthManager } from './baseAuth';
 const PROVIDER_VENDORS = {
   xiaomi: 'crsx.xiaomi',
   glm: 'crsx.glm',
+  groq: 'crsx.groq',
   nvidia: 'crsx.nvidia',
 } as const;
 
@@ -83,6 +87,7 @@ function registerProviderSafely(
 export function activate(context: vscode.ExtensionContext): void {
   const xiaomiAuthManager = new AuthManager(context.secrets);
   const glmAuthManager = new GlmAuthManager(context.secrets);
+  const groqAuthManager = new GroqAuthManager(context.secrets);
   const nvidiaAuthManager = new NvidiaAuthManager(context.secrets);
 
   const providers: ProviderConfig[] = [
@@ -112,6 +117,20 @@ export function activate(context: vscode.ExtensionContext): void {
         'Set API Key': () => glmAuthManager.promptForApiKey().then(() => { }),
         'Clear API Key': () => glmAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Z.ai API key cleared'); }),
         'Test Connection': () => testConnection(glmAuthManager, (key) => new GlmApiClient(key), 'glm-4.7-flash', 'Z.ai'),
+      },
+    },
+    {
+      id: 'groq',
+      displayName: 'Groq',
+      vendor: PROVIDER_VENDORS.groq,
+      authManager: groqAuthManager,
+      provider: new GroqChatProvider(groqAuthManager),
+      testModelId: 'llama-3.3-70b-versatile',
+      testClientFactory: (key) => new GroqApiClient(key),
+      manageActions: {
+        'Set API Key': () => groqAuthManager.promptForApiKey().then(() => { }),
+        'Clear API Key': () => groqAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Groq API key cleared'); }),
+        'Test Connection': () => testConnection(groqAuthManager, (key) => new GroqApiClient(key), 'llama-3.3-70b-versatile', 'Groq'),
       },
     },
     {

@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.4.0] - 2026-06-08
+
+- Updated Groq provider configuration
+
+## [1.3.0] - 2026-06-08
+
+- **New provider**: Added Groq API support with the following models:
+  - Llama 3.1 8B Instant
+  - Llama 3.3 70B Versatile
+  - GPT-OSS 120B
+  - GPT-OSS 20B
+  - Groq Compound
+  - Groq Compound Mini
+  - Qwen3 32B
+- **Base URL**: `https://api.groq.com/openai/v1`
+
 ## [1.2.0] - 2026-06-08
 
 - **Performance**: Added API client caching to avoid recreating clients on each request

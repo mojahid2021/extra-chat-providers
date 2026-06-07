@@ -1,6 +1,6 @@
 {
   "name": "extra-chat-providers",
-  "version": "1.2.0",
+  "version": "1.4.0",
   "displayName": "Extra Chat Providers",
   "description": "Extra models providers for Github Copilot Chat",
   "author": "Cristian Militaru",
@@ -48,6 +48,11 @@
         "managementCommand": "extra-chat-providers.glm.manage"
       },
       {
+        "vendor": "crsx.groq",
+        "displayName": "Groq",
+        "managementCommand": "extra-chat-providers.groq.manage"
+      },
+      {
         "vendor": "crsx.nvidia",
         "displayName": "NVIDIA NIM",
         "managementCommand": "extra-chat-providers.nvidia.manage"
@@ -61,6 +66,10 @@
       {
         "command": "extra-chat-providers.glm.manage",
         "title": "Extra Chat Providers: Z.ai - Manage"
+      },
+      {
+        "command": "extra-chat-providers.groq.manage",
+        "title": "Extra Chat Providers: Groq - Manage"
       },
       {
         "command": "extra-chat-providers.nvidia.manage",
