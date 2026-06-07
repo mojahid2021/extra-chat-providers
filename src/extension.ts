@@ -17,6 +17,17 @@ const PROVIDER_VENDORS = {
   nvidia: 'crsx.nvidia',
 } as const;
 
+interface ProviderConfig {
+  id: keyof typeof PROVIDER_VENDORS;
+  displayName: string;
+  vendor: string;
+  authManager: BaseAuthManager;
+  provider: vscode.LanguageModelChatProvider;
+  testModelId: string;
+  testClientFactory: (key: string) => GenericApiClient;
+  manageActions: Record<string, () => Promise<void>>;
+}
+
 async function testConnection(
   authManager: BaseAuthManager,
   clientFactory: (key: string) => GenericApiClient,
@@ -71,54 +82,70 @@ function registerProviderSafely(
 
 export function activate(context: vscode.ExtensionContext): void {
   const xiaomiAuthManager = new AuthManager(context.secrets);
-  const xiaomiProvider = new MiMoChatProvider(xiaomiAuthManager);
   const glmAuthManager = new GlmAuthManager(context.secrets);
-  const glmProvider = new GlmChatProvider(glmAuthManager);
   const nvidiaAuthManager = new NvidiaAuthManager(context.secrets);
-  const nvidiaProvider = new NvidiaChatProvider(nvidiaAuthManager);
 
-  const xiaomiManageActions: Record<string, () => Promise<void>> = {
-    'Set API Key': () => xiaomiAuthManager.promptForApiKey().then(() => { }),
-    'Clear API Key': () => xiaomiAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Xiaomi API key cleared'); }),
-    'Test Connection': () => testConnection(xiaomiAuthManager, (key) => new MiMoApiClient(key), 'mimo-v2-flash', 'Xiaomi'),
-  };
+  const providers: ProviderConfig[] = [
+    {
+      id: 'xiaomi',
+      displayName: 'Xiaomi',
+      vendor: PROVIDER_VENDORS.xiaomi,
+      authManager: xiaomiAuthManager,
+      provider: new MiMoChatProvider(xiaomiAuthManager),
+      testModelId: 'mimo-v2-flash',
+      testClientFactory: (key) => new MiMoApiClient(key),
+      manageActions: {
+        'Set API Key': () => xiaomiAuthManager.promptForApiKey().then(() => { }),
+        'Clear API Key': () => xiaomiAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Xiaomi API key cleared'); }),
+        'Test Connection': () => testConnection(xiaomiAuthManager, (key) => new MiMoApiClient(key), 'mimo-v2-flash', 'Xiaomi'),
+      },
+    },
+    {
+      id: 'glm',
+      displayName: 'Z.ai',
+      vendor: PROVIDER_VENDORS.glm,
+      authManager: glmAuthManager,
+      provider: new GlmChatProvider(glmAuthManager),
+      testModelId: 'glm-4.7-flash',
+      testClientFactory: (key) => new GlmApiClient(key),
+      manageActions: {
+        'Set API Key': () => glmAuthManager.promptForApiKey().then(() => { }),
+        'Clear API Key': () => glmAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Z.ai API key cleared'); }),
+        'Test Connection': () => testConnection(glmAuthManager, (key) => new GlmApiClient(key), 'glm-4.7-flash', 'Z.ai'),
+      },
+    },
+    {
+      id: 'nvidia',
+      displayName: 'NVIDIA NIM',
+      vendor: PROVIDER_VENDORS.nvidia,
+      authManager: nvidiaAuthManager,
+      provider: new NvidiaChatProvider(nvidiaAuthManager),
+      testModelId: 'google/gemma-4-31b-it',
+      testClientFactory: (key) => new NvidiaNimApiClient(key),
+      manageActions: {
+        'Set API Key': () => nvidiaAuthManager.promptForApiKey().then(() => { }),
+        'Clear API Key': () => nvidiaAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('NVIDIA NIM API key cleared'); }),
+        'Test Connection': () => testConnection(nvidiaAuthManager, (key) => new NvidiaNimApiClient(key), 'google/gemma-4-31b-it', 'NVIDIA NIM'),
+      },
+    },
+  ];
 
-  const glmManageActions: Record<string, () => Promise<void>> = {
-    'Set API Key': () => glmAuthManager.promptForApiKey().then(() => { }),
-    'Clear API Key': () => glmAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('Z.ai API key cleared'); }),
-    'Test Connection': () => testConnection(glmAuthManager, (key) => new GlmApiClient(key), 'glm-4.7-flash', 'Z.ai'),
-  };
+  const commands: vscode.Disposable[] = [];
 
-  const nvidiaManageActions: Record<string, () => Promise<void>> = {
-    'Set API Key': () => nvidiaAuthManager.promptForApiKey().then(() => { }),
-    'Clear API Key': () => nvidiaAuthManager.deleteApiKey().then(() => { vscode.window.showInformationMessage('NVIDIA NIM API key cleared'); }),
-    'Test Connection': () => testConnection(nvidiaAuthManager, (key) => new NvidiaNimApiClient(key), 'google/gemma-4-31b-it', 'NVIDIA NIM'),
-  };
+  for (const config of providers) {
+    registerProviderSafely(context, config.vendor, config.displayName, config.provider);
 
-  registerProviderSafely(context, PROVIDER_VENDORS.xiaomi, 'Xiaomi', xiaomiProvider);
-  registerProviderSafely(context, PROVIDER_VENDORS.glm, 'Z.ai', glmProvider);
-  registerProviderSafely(context, PROVIDER_VENDORS.nvidia, 'NVIDIA NIM', nvidiaProvider);
+    commands.push(
+      vscode.commands.registerCommand(`extra-chat-providers.${config.id}.manage`, async () => {
+        const choice = await vscode.window.showQuickPick(Object.keys(config.manageActions), {
+          placeHolder: `Manage ${config.displayName} provider`,
+        });
+        if (choice) { await config.manageActions[choice](); }
+      }),
+    );
+  }
 
-  context.subscriptions.push(
-    vscode.commands.registerCommand('extra-chat-providers.xiaomi.manage', async () => {
-      const choice = await vscode.window.showQuickPick(Object.keys(xiaomiManageActions), {
-        placeHolder: 'Manage Xiaomi MiMo provider',
-      });
-      if (choice) { await xiaomiManageActions[choice](); }
-    }),
-    vscode.commands.registerCommand('extra-chat-providers.glm.manage', async () => {
-      const choice = await vscode.window.showQuickPick(Object.keys(glmManageActions), {
-        placeHolder: 'Manage Z.ai (GLM) provider',
-      });
-      if (choice) { await glmManageActions[choice](); }
-    }),
-    vscode.commands.registerCommand('extra-chat-providers.nvidia.manage', async () => {
-      const choice = await vscode.window.showQuickPick(Object.keys(nvidiaManageActions), {
-        placeHolder: 'Manage NVIDIA NIM provider',
-      });
-      if (choice) { await nvidiaManageActions[choice](); }
-    }),
-  );
+  context.subscriptions.push(...commands);
 }
 
 export function deactivate(): void { }

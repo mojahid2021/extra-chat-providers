@@ -61,3 +61,13 @@ export class BaseAuthManager {
     return (await this.getApiKey()) ?? this.promptForApiKey();
   }
 }
+
+export interface AuthManagerConfig {
+  secretKey: string;
+  displayName: string;
+  legacySecretKey?: string;
+}
+
+export function createAuthManager(secrets: vscode.SecretStorage, config: AuthManagerConfig): BaseAuthManager {
+  return new BaseAuthManager(secrets, config.secretKey, config.displayName, config.legacySecretKey);
+}

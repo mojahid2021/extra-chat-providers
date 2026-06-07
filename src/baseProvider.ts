@@ -58,12 +58,24 @@ export abstract class BaseChatProvider implements vscode.LanguageModelChatProvid
 
   readonly onDidChangeLanguageModelChatInformation: vscode.Event<void>;
 
+  private clientCache = new Map<string, GenericApiClient>();
+
   protected mapModelId(modelId: string): string {
     return modelId;
   }
 
   constructor(protected readonly authManager: BaseAuthManager) {
     this.onDidChangeLanguageModelChatInformation = authManager.onDidChangeApiKey;
+    this.authManager.onDidChangeApiKey(() => this.clientCache.clear());
+  }
+
+  protected getOrCreateClient(apiKey: string): GenericApiClient {
+    let client = this.clientCache.get(apiKey);
+    if (!client) {
+      client = new GenericApiClient(apiKey, this.baseURL, this.providerDisplayName);
+      this.clientCache.set(apiKey, client);
+    }
+    return client;
   }
 
   async provideLanguageModelChatInformation(
@@ -103,7 +115,7 @@ export abstract class BaseChatProvider implements vscode.LanguageModelChatProvid
 
     try {
       await this.streamResponse(
-        new GenericApiClient(apiKey, this.baseURL, this.providerDisplayName),
+        this.getOrCreateClient(apiKey),
         model,
         messages,
         options,

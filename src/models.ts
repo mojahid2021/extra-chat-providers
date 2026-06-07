@@ -1,6 +1,6 @@
 import type * as vscode from 'vscode';
 
-export const MIMO_MODELS: vscode.LanguageModelChatInformation[] = [
+export const MIMO_MODELS = [
   {
     id: 'mimo-v2-pro',
     name: 'MiMo-V2-Pro',
@@ -36,7 +36,7 @@ export const MIMO_MODELS: vscode.LanguageModelChatInformation[] = [
   },
 ];
 
-export const GLM_MODELS: vscode.LanguageModelChatInformation[] = [
+export const GLM_MODELS = [
   {
     id: 'glm-5.1',
     name: 'GLM-5.1',
@@ -138,7 +138,7 @@ export const GLM_MODELS: vscode.LanguageModelChatInformation[] = [
   },
 ];
 
-export const NIM_MODELS: vscode.LanguageModelChatInformation[] = [
+export const NIM_MODELS = [
   {
     id: 'gemma-4-31b-it',
     name: 'Gemma 4 31B IT',

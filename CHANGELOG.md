@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0] - 2026-06-08
+
+- **Performance**: Added API client caching to avoid recreating clients on each request
+- **Refactoring**: Consolidated provider registration using data-driven approach in extension.ts
+- **Refactoring**: Added `createAuthManager()` factory function in baseAuth.ts
+- **Type optimization**: Added const assertions to model arrays for better inference
+
 ## [1.1.0] - 2026-06-04
 
 - Added new models to NVIDIA NIM provider:
